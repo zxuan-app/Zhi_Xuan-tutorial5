@@ -13,17 +13,20 @@ public class MainActivity extends AppCompatActivity {
     Button btn;
     private int number;
     int[] image = {R.drawable.pic1, R.drawable.pic2, R.drawable.pic3, R.drawable.pic4};
+    int imgState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (savedInstanceState != null) {
+            imgState = savedInstanceState.getInt("pic_num");
+            number = imgState;
+        }
 
         img = findViewById(R.id.img1);
         btn = findViewById(R.id.btn1);
-
-        img.setBackgroundResource(image[0]);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,5 +37,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void onStart() {
+        super.onStart();
+        img.setBackgroundResource(image[imgState]);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        img.setBackgroundResource(image[imgState]);
+        number = savedInstanceState.getInt("pic_num");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("pic_num" , number);
+
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState);
     }
 }
